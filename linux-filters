@@ -1,0 +1,87 @@
+# This Duplicacy filter template is designed for the home directory of a Linux machine.
+# It may be used for both servers and desktops.
+
+# As a general rule, do not back up any cache data reachable from your home directory.
+# Placed at the top, since Duplicacy applies its filters from top to bottom.
+# You may add more cache directories if your system has additional cache folders with different names
+-*/cache/
+
+
+# Add lines for programs that use .config as a place to store their cache files.
+# In this example, these programs do not respect their own cache naming conventions
+# and sometimes place them top level.
+# A few examples have been included: you may adjust, add or remove as you wish
+-.config/JetBrains/
+-.config/BraveSoftware/
+-.config/google-chrome/
+-.config/spotify/
+-.config/Slack/
+
+
+# After all cache has been excluded, the remaining contents in the config folder are included
++.config/*
+
+
+# Now we move on to hidden files and folders that you may wish to include in the backup
+# Note that in a later step, any hidden file or folder not explicitly included for backups
+# will be filtered out.
+
+
+# hidden folders:
++.preferences/*
++.var/*
+
+# hidden files:
++.bash_aliases
++.bash_history
++.bash_logout
++.bashrc
++.gitconfig
++.latexmkrc
++.profile
++.profile.bak
++.qwe.data
++.viminfo
++.vimrc
+
+
+# In this code block example, the plasma-vault folder in .local/share is included
+# but the rest of local/share/ is excluded.
+# You can use a similar set of patterns (in the same order) to achieve a similar outcome
+# If you do not have a need for this usecase, you can comment these out
+# Read more here: https://forum.duplicacy.com/t/filters-include-exclude-patterns/1089
++.local/
++.local/share/
++.local/share/plasma-vault/*
+-.local/share/?*
+
+
+# As mentioned before, any hidden file or folder not included above
+# will be filtered out by this rule
+-.*
+
+
+# At this point, hidden files have been excluded / included from the backups
+# The backup patterns will now move on to excluding non-hidden folders and files
+# In a later step, any non-hidden file or folder not explicitly excluded
+# will be filtered out.
+
+
+# Non-hidden exclusions:
+-Backups/*
+-bin/*
+-Bundled Programs/*
+-Vaults/*
+-Downloads/*
+-Calibre Library/*
+
+# Specialized exclusions here
+# Delete these if they don't fit your use case, or add your own
+# This exclusion removes the versioning left behind by Syncthing,
+# since Duplicacy already does versioning
+-Subscribed/*/.stversions/*
+
+
+# Remaining non-hidden files/folders (not excluded above)
+# will be included
+i:^[[:alnum:]]*
